@@ -18,7 +18,7 @@ virtualenv venv
 ```bash
 path/to/venv/Scripts/activate.bat
 ```
-## Setup proyect
+## Setup project
 ### Run the following commands inside the project directory
 #
 ### Install requeriments
