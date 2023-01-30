@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from simple_history.models import HistoricalRecords
+from rest_framework import serializers
+
+from apps.base.models import Common
 
 
 class UserManager(BaseUserManager):
@@ -25,7 +28,7 @@ class UserManager(BaseUserManager):
         return self._create_user(username, email, name, last_name, password, True, True, **extra_fields)
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin, Common):
     MALE = 'Male'
     FEMALE = 'Female'
     genderChoices = (
@@ -40,7 +43,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.TextField('Dirección', blank=True, null=True)
     phone = models.CharField('Telefono', max_length=10, blank=True, null=True)
     gender = models.CharField('Genero', max_length=40, choices=genderChoices, blank=True, null=True)
-    # image = models.ImageField('Imagen de perfil', upload_to='perfil/', max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     historical = HistoricalRecords()
@@ -55,3 +57,4 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f'{self.name} {self.last_name}'
+    

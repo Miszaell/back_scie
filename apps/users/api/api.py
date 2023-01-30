@@ -27,7 +27,7 @@ class UserViewSet(Authentication,viewsets.GenericViewSet):
         if self.queryset is None:
             self.queryset = self.model.objects\
                 .filter(is_active=True)\
-                .values('id', 'username', 'last_name', 'email', 'name')
+                .values('id', 'username', 'last_name', 'email', 'name', 'r_object')
         return self.queryset
 
     @action(detail=True, methods=['post'])

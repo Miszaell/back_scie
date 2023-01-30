@@ -10,7 +10,7 @@ class UserTokenSerializer(serializers.ModelSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','username','email', 'password','name','last_name', 'date_of_birth', 'address', 'phone', 'gender')
+        fields = ('id','username','email', 'password','name','last_name', 'date_of_birth', 'address', 'phone', 'gender', 'r_object')
         
     def create(self, validated_data):
         user = User(**validated_data)
@@ -39,6 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
             'address': instance.address,
             'phone': instance.phone,
             'gender': instance.gender,
+            'r_object': instance.r_object,
             # 'image': instance.image.url if instance.image != '' else '',
         }
 
@@ -61,7 +62,8 @@ class PasswordSerializer(serializers.Serializer):
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ('id','email','name','last_name', 'r_object')
+        # fields = "__all__"
     def to_representation(self, instance):
         return {
             'id': instance['id'],
@@ -69,4 +71,6 @@ class UserListSerializer(serializers.ModelSerializer):
             'last_name': instance['last_name'] if instance['last_name'] != '' else '',
             'username': instance['username'],
             'email': instance['email'],
+            'r_object': instance['r_object'],
+            
         }
