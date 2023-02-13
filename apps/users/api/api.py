@@ -8,7 +8,7 @@ from rest_framework.parsers import JSONParser, MultiPartParser
 from apps.users.models import User
 from apps.users.api.serializers import (
     CustomUserSerializer, UserListSerializer, UpdateUserSerializer,
-    PasswordSerializer
+    PasswordSerializer, UserSerializer
 )
 
 
@@ -87,7 +87,21 @@ class UserViewSet(viewsets.GenericViewSet):
                 'message': 'There are errors in the update',
                 'errors': user_serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
-
+            
+    def patch(self, request, pk):
+        user = self.get_object(pk)
+        if user:
+            user_serializer = UserSerializer(user, data=request.data, partial=True)
+            if user_serializer.is_valid():
+                user_serializer.save()
+                return Response({
+                    'message': 'Successfully partial updated user'
+                }, status=status.HTTP_200_OK)
+            return Response({
+                'message': 'There are errors in the partial update',
+                'errors': user_serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
     def destroy(self, request, pk=None):
         user_destroy = self.model.objects.filter(id=pk).update(is_active=False)
         if user_destroy == 1:
