@@ -7,6 +7,7 @@ from apps.users.views import Login, Logout, UserToken
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api_authorization/', include('rest_framework.urls')),
     path('login/', Login.as_view(), name = 'login'),
     path('refresh-token/', UserToken.as_view(), name = 'refresh-token'),
     path('logout/', Logout.as_view(), name = 'logout'),

@@ -22,6 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+        extra_kwargs = { 'password': { 'write_only': True}}
         
     def create(self,validated_data):
         user = User(**validated_data)
@@ -46,7 +47,9 @@ class UserSerializer(serializers.ModelSerializer):
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email', 'name', 'last_name')
+        fields = ('username', 'email', 'name', 'last_name', 'r_object')
+        
+        
 
 class PasswordSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=128, min_length=6, write_only=True)
@@ -62,15 +65,18 @@ class PasswordSerializer(serializers.Serializer):
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','email','name','last_name', 'r_object')
+        fields = ('id','email','name','last_name', 'username','is_staff','r_object')
+        extra_kwargs = { 'password': { 'write_only': True}}
+        
         # fields = "__all__"
-    def to_representation(self, instance):
-        return {
-            'id': instance['id'],
-            'name': instance['name'],
-            'last_name': instance['last_name'] if instance['last_name'] != '' else '',
-            'username': instance['username'],
-            'email': instance['email'],
-            'r_object': instance['r_object'],
+    # def to_representation(self, instance):
+    #     return {
+    #         'id': instance['id'],
+    #         'name': instance['name'],
+    #         'last_name': instance['last_name'] if instance['last_name'] != '' else '',
+    #         'username': instance['username'],
+    #         'email': instance['email'],
+    #         'password' : instance['password'],
+    #         'r_object': instance['r_object'],
             
-        }
+    #     }

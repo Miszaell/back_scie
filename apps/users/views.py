@@ -6,7 +6,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from apps.users.api.serializers import UserTokenSerializer
-
+from rest_framework.authentication import get_authorization_header
 class UserToken(APIView):
     def post(self,request,*args,**kwargs):
         email = request.data['email']
@@ -18,7 +18,7 @@ class UserToken(APIView):
                 'token': user_token.key
             })
         except:
-            return Response({'error': 'The credentials received are incorrect.'},status = status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'The credentials received are incorrect.'},status = status.HTTP_401_UNAUTHORIZED)
                             
 class Login(ObtainAuthToken):
     
@@ -50,12 +50,16 @@ class Login(ObtainAuthToken):
             else:
                 return Response({'error':'This user is disabled'}, status = status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({'error': 'Invalid username or password'}, status = status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Invalid username or password'}, status = status.HTTP_401_UNAUTHORIZED)
 
 class Logout(APIView):
     def post(self, request, *args, **kwargs):
         try:
-            token = request.data['token']
+            token = get_authorization_header(request).split()
+            try:
+                token = token[1].decode()
+            except:
+                return None
             token = Token.objects.filter(key=token).first()
 
             if token:

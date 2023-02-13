@@ -36,7 +36,7 @@ class ExpiringTokenAuthentication(TokenAuthentication):
             token = self.get_model().objects.select_related('user').get(key=key)
             user = token.user
         except self.get_model().DoesNotExist:
-            message = 'Token inválido.'
+            message = 'Token inválido, crea una nueva sesión.'
             self.expired = True
 
         if token is not None:

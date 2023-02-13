@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from simple_history.models import HistoricalRecords
@@ -35,11 +36,12 @@ class User(AbstractBaseUser, PermissionsMixin, Common):
         (MALE, 'Male'),
         (FEMALE, 'Female')
     )
+    
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField('Email', max_length=255, unique=True,)
     name = models.CharField('Nombre(s)', max_length=255, blank=True, null=True)
     last_name = models.CharField('Apellidos', max_length=255, blank=True, null=True)
-    date_of_birth = models.DateField('Fecha de nacimiento', max_length=255, blank=True, null=True, default='1980-01-01')
+    date_of_birth = models.DateField('Fecha de nacimiento', max_length=255, blank=True, null=True, default='2000-01-01')
     address = models.TextField('Dirección', blank=True, null=True)
     phone = models.CharField('Telefono', max_length=10, blank=True, null=True)
     gender = models.CharField('Genero', max_length=40, choices=genderChoices, blank=True, null=True)
